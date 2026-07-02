@@ -77,12 +77,12 @@ These values are derived from the waveform data stored in the raster-scan files 
 
 ## Example images
 
-Below are example outputs from the raster scan analysis, shown as images exported from the MATLAB plots:
+Below are example outputs from the raster scan analysis, shown as images stored in this repository:
 
-- **Axial Acoustic Amplitude Distribution**: `Axial_Acoustic_Amplitude_Distribution.png` — shows peak voltage versus axial distance for the 30 mm focus scan.
-- **XY Acoustic Field Map**: `XY_Acoustic_Field_Map.png` — shows the lateral acoustic field distribution at 60 mm and the measured beam focus.
-- **XZ Acoustic Field Map**: `XZ_Acoustic_Field_Map.png` — shows the cross-sectional acoustic profile for the 25 mm or 35 mm field scan.
-- **Channel 1 Waveform**: `Channel_1_Waveform.png` — shows a representative time-domain waveform for one transmit channel.
+- **Axial Acoustic Amplitude Distribution**: ![Axial acoustic amplitude distribution](Axial_Acoustic_Amplitude_Distribution.png) — shows peak voltage versus axial distance for the 30 mm focus scan.
+- **XY Acoustic Field Map**: ![XY acoustic field map](XY_Acoustic_Field_Map.png) — shows the lateral acoustic field distribution at 60 mm and the measured beam focus.
+- **XZ Acoustic Field Map**: ![XZ acoustic field map](XZ_Acoustic_Field_Map.png) — shows the cross-sectional acoustic profile for the 25 mm or 35 mm field scan.
+- **Channel 1 Waveform**: ![Channel 1 waveform](Channel_1_Waveform.png) — shows a representative time-domain waveform for one transmit channel.
 
 These images illustrate the type of plots the script produces and help communicate the measured beam patterns and focus metrics.
 
