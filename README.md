@@ -30,12 +30,12 @@ The script expects MATLAB data files (.mat) in the same folder. Each file should
 
 Example files used by the script include:
 
-- `12-Jun-2026-5_RasterScan.mat`
-- `12-Jun-2026-10_RasterScan.mat`
-- `Programmed10_RasterScan.mat`
-- `Zf30_RasterScan.mat`
-- `Zf35_RasterScan.mat`
-- `Zf25_RasterScan_5Wcm2.mat`
+- `RealAxialFocus_5mA_RasterScan.mat`
+- `RealAxialFocus_10mA_RasterScan.mat`
+- `ProgrammedFocus_10mA_RasterScan.mat`
+- `AxialFocus_30mm_RasterScan.mat`
+- `AxialFocus_35mm_RasterScan.mat`
+- `AxialFocus_25mm_5Wcm2_RasterScan.mat`
 
 ## How to run
 
@@ -62,6 +62,29 @@ Running the script generates:
 - calibration plots for peak voltage versus Ispta setting,
 - axial amplitude plots for the scan positions,
 - focal point estimates and focal region measurements printed in the MATLAB command window.
+
+### Example output
+
+A typical result from the axial-focus analysis is a plot of peak voltage versus Ispta setting, together with printed output such as:
+
+```text
+Focal position at 30f for Z = 32.10 mm
+Maximum amplitude at 30f for Z = 0.4823 V
+Focal region length at 30f for Z = 4.20 mm
+```
+
+These values are derived from the waveform data stored in the raster-scan files and provide a simple description of the acoustic focus behaviour.
+
+## Example images
+
+Below are example outputs from the raster scan analysis, shown as images exported from the MATLAB plots:
+
+- **Axial Acoustic Amplitude Distribution**: `Axial_Acoustic_Amplitude_Distribution.png` — shows peak voltage versus axial distance for the 30 mm focus scan.
+- **XY Acoustic Field Map**: `XY_Acoustic_Field_Map.png` — shows the lateral acoustic field distribution at 60 mm and the measured beam focus.
+- **XZ Acoustic Field Map**: `XZ_Acoustic_Field_Map.png` — shows the cross-sectional acoustic profile for the 25 mm or 35 mm field scan.
+- **Channel 1 Waveform**: `Channel_1_Waveform.png` — shows a representative time-domain waveform for one transmit channel.
+
+These images illustrate the type of plots the script produces and help communicate the measured beam patterns and focus metrics.
 
 ## Future work
 
