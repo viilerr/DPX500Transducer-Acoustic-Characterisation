@@ -75,221 +75,231 @@ ylabel('Peak Voltage (mV)');
 title('Calibration Curve Programmed Focus');
 
 
-%Z30 scan
+%Z30
 
-
-fs = 125e6;        % sampling frequency (Hz)
-c = 1485;          % speed of sound in water (m/s)
-N = 91;            % number of Z positions
-
-
+fs = 125e6;
+c = waterSoundSpeed(21);      
 load('Zf30_RasterScan.mat')
+N = size(rasterscandata,1);
+step = 0.5;                  
 
-z_mm = zeros(N,1);
+wf = double(squeeze(rasterscandata(1,1,:)));
+env = abs(hilbert(wf));
+noise = median(env(1:1000));
+threshold = 5*noise;   %could adjjust      
+arrival_idx = find(env > threshold,1,'first');
+arrival_time = (arrival_idx-1)/fs;     
+start_distance_mm = arrival_time*c*1000;
+
+z_mm = start_distance_mm + (0:N-1)*step;
 amplitude = zeros(N,1);
-for i = 1:N
 
-    wf = squeeze(rasterscandata(i,1,:));
-    wf = double(wf);
-    threshold = 0.2 * max(abs(wf));
-    index = find(abs(wf) > threshold,1,'first');
-    t_arrival = index / fs;
-    z_mm(i) = t_arrival * c * 1000;
-    amplitude(i) = max(abs(wf));
+for i = 1:N
+    wf = double(squeeze(rasterscandata(i,1,:)));
+    env = abs(hilbert(wf));
+    amplitude(i) = max(env);
 
 end
 
 figure;
-plot(z_mm, amplitude, '-','LineWidth',2);
+plot(z_mm, amplitude,'-o','LineWidth',2,'MarkerSize',4);
 grid on;
-xlabel('Axial Distance (mm)');
-ylabel('Peak Voltage (V)');
-title('Axial Acoustic Amplitude Distribution for Z f=30mm');
-
-%focus
+xlabel('Distance from Transducer (mm)');
+ylabel('Peak Envelope Amplitude (V)');
+title('Axial Acoustic Amplitude Distribution for Z f = 30 mm');
 [max_amp, focus_index] = max(amplitude);
 focus_position = z_mm(focus_index);
+
 fprintf('\n=========================\n');
-fprintf('Focal position at 30f for Z = %.2f mm\n',focus_position);
-fprintf('Maximum amplitude at 30f for Z = %.4f V\n',max_amp);
+fprintf('Focal position at Z f=30 mm = %.2f mm\n',focus_position);
+fprintf('Maximum amplitude at Z f=30 mm = %.4f V\n',max_amp);
 fprintf('=========================\n');
 
-%focal region
-half_max = 0.5 * max_amp;
+half_max = 0.5*max_amp;
 focal_indices = amplitude >= half_max;
 focal_z = z_mm(focal_indices);
+
 lower_focus = focal_z(1);
 upper_focus = focal_z(end);
 focal_length = upper_focus - lower_focus;
-fprintf('Focal region start at 30f for Z = %.2f mm\n',lower_focus);
-fprintf('Focal region end at 30f for Z= %.2f mm\n',upper_focus);
-fprintf('Focal region length at 30f for Z= %.2f mm\n',focal_length);
+
+fprintf('Focal region start at Z f=30 mm = %.2f mm\n',lower_focus);
+fprintf('Focal region end at Z f=30 mm = %.2f mm\n',upper_focus);
+fprintf('Focal region length at Z f=30 mm = %.2f mm\n',focal_length);
+
 hold on;
 plot(focus_position,max_amp,'r*','MarkerSize',12);
-legend('Axial amplitude','Focus');
+legend('Envelope amplitude','Focus');
 
 
 %Z35 scan
 
-
-fs = 125e6;        % sampling frequency (Hz)
-c = 1485;          % speed of sound in water (m/s)
-N = 91;            % number of Z positions
-
-
+fs = 125e6;
+c = waterSoundSpeed(21);      
 load('Zf35_RasterScan.mat')
+N = size(rasterscandata,1);
+step = 0.5;                  
 
-z_mm = zeros(N,1);
+wf = double(squeeze(rasterscandata(1,1,:)));
+env = abs(hilbert(wf));
+noise = median(env(1:1000));
+threshold = 5*noise;   %could adjjust      
+arrival_idx = find(env > threshold,1,'first');
+arrival_time = (arrival_idx-1)/fs;     
+start_distance_mm = arrival_time*c*1000;
+
+z_mm = start_distance_mm + (0:N-1)*step;
 amplitude = zeros(N,1);
-for i = 1:N
 
-    wf = squeeze(rasterscandata(i,1,:));
-    wf = double(wf);
-    threshold = 0.2 * max(abs(wf));
-    index = find(abs(wf) > threshold,1,'first');
-    t_arrival = index / fs;
-    z_mm(i) = t_arrival * c * 1000;
-    amplitude(i) = max(abs(wf));
+for i = 1:N
+    wf = double(squeeze(rasterscandata(i,1,:)));
+    env = abs(hilbert(wf));
+    amplitude(i) = max(env);
 
 end
 
-
 figure;
-plot(z_mm, amplitude, '-','LineWidth',2);
+plot(z_mm, amplitude,'-o','LineWidth',2,'MarkerSize',4);
 grid on;
-xlabel('Axial Distance (mm)');
-ylabel('Peak Voltage (V)');
-title('Axial Acoustic Amplitude Distribution for Z f=35mm');
-
-%focus
+xlabel('Distance from Transducer (mm)');
+ylabel('Peak Envelope Amplitude (V)');
+title('Axial Acoustic Amplitude Distribution for Z f = 35 mm');
 [max_amp, focus_index] = max(amplitude);
 focus_position = z_mm(focus_index);
+
 fprintf('\n=========================\n');
-fprintf('Focal position at 35f for Z= %.2f mm\n',focus_position);
-fprintf('Maximum amplitude at 35f for Z= %.4f V\n',max_amp);
+fprintf('Focal position at Z f=35 mm = %.2f mm\n',focus_position);
+fprintf('Maximum amplitude at Z f=35 mm = %.4f V\n',max_amp);
 fprintf('=========================\n');
 
-%focal region
-half_max = 0.5 * max_amp;
+half_max = 0.5*max_amp;
 focal_indices = amplitude >= half_max;
 focal_z = z_mm(focal_indices);
+
 lower_focus = focal_z(1);
 upper_focus = focal_z(end);
 focal_length = upper_focus - lower_focus;
-fprintf('Focal region start at 35f for Z= %.2f mm\n',lower_focus);
-fprintf('Focal region end at 35f for Z= %.2f mm\n',upper_focus);
-fprintf('Focal region length at 35f for Z= %.2f mm\n',focal_length);
+
+fprintf('Focal region start at Z f=35 mm = %.2f mm\n',lower_focus);
+fprintf('Focal region end at Z f=35 mm = %.2f mm\n',upper_focus);
+fprintf('Focal region length at Z f=35 mm = %.2f mm\n',focal_length);
+
 hold on;
 plot(focus_position,max_amp,'r*','MarkerSize',12);
-legend('Axial amplitude','Focus');
-
+legend('Envelope amplitude','Focus');
 
 %Z25_5Wcm2 scan
 
-
-fs = 125e6;        % sampling frequency (Hz)
-c = 1485;          % speed of sound in water (m/s)
-N = 91;            % number of Z positions
-
-
+fs = 125e6;
+c = waterSoundSpeed(21);      
 load('Zf25_RasterScan_5Wcm2.mat')
+N = size(rasterscandata,1);
+step = 0.5;                  
 
-z_mm = zeros(N,1);
+wf = double(squeeze(rasterscandata(1,1,:)));
+env = abs(hilbert(wf));
+noise = median(env(1:1000));
+threshold = 5*noise;   %could adjjust      
+arrival_idx = find(env > threshold,1,'first');
+arrival_time = (arrival_idx-1)/fs;     
+start_distance_mm = arrival_time*c*1000;
+
+z_mm = start_distance_mm + (0:N-1)*step;
 amplitude = zeros(N,1);
-for i = 1:N
 
-    wf = squeeze(rasterscandata(i,1,:));
-    wf = double(wf);
-    threshold = 0.2 * max(abs(wf));
-    index = find(abs(wf) > threshold,1,'first');
-    t_arrival = index / fs;
-    z_mm(i) = t_arrival * c * 1000;
-    amplitude(i) = max(abs(wf));
+for i = 1:N
+    wf = double(squeeze(rasterscandata(i,1,:)));
+    env = abs(hilbert(wf));
+    amplitude(i) = max(env);
 
 end
 
 figure;
-plot(z_mm, amplitude, '-','LineWidth',2);
+plot(z_mm, amplitude,'-o','LineWidth',2,'MarkerSize',4);
 grid on;
-xlabel('Axial Distance (mm)');
-ylabel('Peak Voltage (V)');
-title('Axial Acoustic Amplitude Distribution for Z f=25 mm and I=5Wcm2');
-
-%focus
+xlabel('Distance from Transducer (mm)');
+ylabel('Peak Envelope Amplitude (V)');
+title('Axial Acoustic Amplitude Distribution for Z f = 25 mm and P = 5 Wcm2');
 [max_amp, focus_index] = max(amplitude);
 focus_position = z_mm(focus_index);
+
 fprintf('\n=========================\n');
-fprintf('Focal position at 35f, 5Wcm2 for Z= %.2f mm\n',focus_position);
-fprintf('Maximum amplitude at 35f, 5Wcm2 for Z= %.4f V\n',max_amp);
+fprintf('Focal position at Z f=25 mm and 5 Wcm2 = %.2f mm\n',focus_position);
+fprintf('Maximum amplitude at Z f=25 mm and 5Wcm2= %.4f V\n',max_amp);
 fprintf('=========================\n');
 
-%focal region
-half_max = 0.5 * max_amp;
+half_max = 0.5*max_amp;
 focal_indices = amplitude >= half_max;
 focal_z = z_mm(focal_indices);
+
 lower_focus = focal_z(1);
 upper_focus = focal_z(end);
 focal_length = upper_focus - lower_focus;
-fprintf('Focal region start at 35f, 5Wcm2 for Z= %.2f mm\n',lower_focus);
-fprintf('Focal region end at 35f, 5Wcm2 for Z= %.2f mm\n',upper_focus);
-fprintf('Focal region length at 35f, 5Wcm2 for Z= %.2f mm\n',focal_length);
+
+fprintf('Focal region start at Z f=25 mm and 5 Wcm2 = %.2f mm\n',lower_focus);
+fprintf('Focal region end at Z f=25 mm and 5 Wcm2 = %.2f mm\n',upper_focus);
+fprintf('Focal region length at Z f=25 mm and 5 Wcm2 = %.2f mm\n',focal_length);
+
 hold on;
 plot(focus_position,max_amp,'r*','MarkerSize',12);
-legend('Axial amplitude','Focus');
-
+legend('Envelope amplitude','Focus');
 
 %Z25_30Wcm2 scan
 
 
-fs = 125e6;        % sampling frequency (Hz)
-c = 1485;          % speed of sound in water (m/s)
-N = 71;            % number of Z positions
-
-
+fs = 125e6;
+c = waterSoundSpeed(21);      
 load('Zf25_RasterScan_30Wcm2.mat')
+N = size(rasterscandata,1);
+step = 0.5;                  
 
-z_mm = zeros(N,1);
+wf = double(squeeze(rasterscandata(1,1,:)));
+env = abs(hilbert(wf));
+noise = median(env(1:1000));
+threshold = 5*noise;   %could adjjust      
+arrival_idx = find(env > threshold,1,'first');
+arrival_time = (arrival_idx-1)/fs;     
+start_distance_mm = arrival_time*c*1000;
+
+z_mm = start_distance_mm + (0:N-1)*step;
 amplitude = zeros(N,1);
-for i = 1:N
 
-    wf = squeeze(rasterscandata(i,1,:));
-    wf = double(wf);
-    threshold = 0.2 * max(abs(wf));
-    index = find(abs(wf) > threshold,1,'first');
-    t_arrival = index / fs;
-    z_mm(i) = t_arrival * c * 1000;
-    amplitude(i) = max(abs(wf));
+for i = 1:N
+    wf = double(squeeze(rasterscandata(i,1,:)));
+    env = abs(hilbert(wf));
+    amplitude(i) = max(env);
 
 end
 
 figure;
-plot(z_mm, amplitude, '-','LineWidth',2);
+plot(z_mm, amplitude,'-o','LineWidth',2,'MarkerSize',4);
 grid on;
-xlabel('Axial Distance (mm)');
-ylabel('Peak Voltage (V)');
-title('Axial Acoustic Amplitude Distribution for Z f=25 mm and I=30Wcm2');
-
-%focus
+xlabel('Distance from Transducer (mm)');
+ylabel('Peak Envelope Amplitude (V)');
+title('Axial Acoustic Amplitude Distribution for Z f = 25 mm and P = 30 Wcm2');
 [max_amp, focus_index] = max(amplitude);
 focus_position = z_mm(focus_index);
+
 fprintf('\n=========================\n');
-fprintf('Focal position at 35f, 30Wcm2 for Z= %.2f mm\n',focus_position);
-fprintf('Maximum amplitude at 35f, 30Wcm2 for Z= %.4f V\n',max_amp);
+fprintf('Focal position at Z f=25 mm and 30 Wcm2 = %.2f mm\n',focus_position);
+fprintf('Maximum amplitude at Z f=25 mm and 30 Wcm2 = %.4f V\n',max_amp);
 fprintf('=========================\n');
 
-%focal region
-half_max = 0.5 * max_amp;
+half_max = 0.5*max_amp;
 focal_indices = amplitude >= half_max;
 focal_z = z_mm(focal_indices);
+
 lower_focus = focal_z(1);
 upper_focus = focal_z(end);
 focal_length = upper_focus - lower_focus;
-fprintf('Focal region start at 35f, 30Wcm2 for Z= %.2f mm\n',lower_focus);
-fprintf('Focal region end at 35f, 30Wcm2 for Z= %.2f mm\n',upper_focus);
-fprintf('Focal region length at 35f, 30Wcm2 for Z= %.2f mm\n',focal_length);
+
+fprintf('Focal region startat Z f=25 mm and 30 Wcm2 = %.2f mm\n',lower_focus);
+fprintf('Focal region end at Z f=25 mm and 30 Wcm2= %.2f mm\n',upper_focus);
+fprintf('Focal region length at Z f=25 mm and 30 Wcm2 = %.2f mm\n',focal_length);
+
 hold on;
 plot(focus_position,max_amp,'r*','MarkerSize',12);
-legend('Axial amplitude','Focus');
+legend('Envelope amplitude','Focus');
 
 
 %XY_11Jun
